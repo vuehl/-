@@ -1,0 +1,306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> 海报画廊</title>
+<style type="text/css">
+/*在js中用笔记本打开，并另存为utf-8的格式，这个默认是ascal格式*/
+*{padding:0;margin:0;}
+body {
+	background:#fff;
+	color:#555;
+	font-family:"微软雅黑";
+	-webkit-font-smoothing:antialiased;
+	-moz-font-smoothing:antialiased;   /*moz是为了兼容Firefox的浏览器*/
+	}
+.wrap {
+	width:100%;
+	height:600px;
+	position:absolute;
+	background-color:#333;
+	top:50%;
+	margin-top:-300px;
+	overflow:hidden;
+	-webkit-perspective:800px;  /*这个是支持下面的3D旋转效果，没有这个下面的只是平面效果*/
+	-moz-perspective:800px;
+	}
+.wrap .photo {
+	width:260px;
+	height:320px;
+	position:absolute;
+	box-shadow:0 0 1px ragb(0,0,0,.01); /*.01是透明度为百分之一的意思*/
+	z-index:1;
+	-webkit-transition:all 1s;        /*这个是使所有的图片都有一个动画的效果*/
+	-moz-transition:all 1s; 
+	}	
+.wrap .photo .side {
+	width:100%;
+	height:100%;
+	background:#eee;
+	position:absolute;
+	padding:20px;
+	box-sizing:box-shadow; /*这个的作用是，里面的内容和编剧都不会超过边框*/
+	}	
+.wrap .photo .side_front .image {
+	width:100%;
+	height:250px;
+	line-height:250px;
+	overflow:hidden;
+	}	
+.wrap .photo .side_front .image img {
+	width:100%;
+	height:250px;
+	}	
+.wrap .photo .side_front .caption {
+	width:100%;
+	height:50px;
+	line-height:50px;
+	text-align:center;
+	font-size:16px;
+	}	
+.wrap .photo .side_back .desc {
+   color:#666;
+   font-size:14px;
+   line-height:1.5em;
+	}	
+/*设置当前选中的图片*/	
+.wrap .photo_center {
+	left:50%;
+	top:50%;            /*这中居中要设置位置为position:absolute;为绝对位置才可以*/
+	margin:-160px 0 0 -130px;
+	z-index:999;
+	}	
+/*负责翻转的效果*/
+.photo_wrap {
+ width:100%;
+ height:100%;
+ position:absolute;
+ -webkit-transform-style:preserve-3d;  /*这个使photo_wrap的子元素也具有3d效果*/	
+ -webkit-transition:all 1s; 
+ -moz-transform-style:preserve-3d;          /*第一个是规定过度名称，默认是all，第二个是过度时间*/
+ -moz-transition:all 1s; 
+}	
+.photo_wrap .side_front {
+	-webkit-transform:rotateY(0deg);
+	-moz-transform:rotateY(0deg);
+	}
+.photo_wrap .side_back {           /*这个旋转180deg是让文字在右边去了*/
+	-webkit-transform:rotateY(180deg);
+	-moz-transform:rotateY(180deg);
+	}	
+.photo_wrap .side {
+	-webkit-backface-visibility:hidden;  /*这个是当元素不面向屏幕时隐藏，不设置的话就会在这面显示出来，而且还是以镜面的形式显现,因为我两个正反面都命名有side所以就写一个就可以了*/
+	-moz-backface-visibility:hidden;
+	}
+.photo_front .photo_wrap {             /*这里photo_front这里是在线面没有写，但是有效果是，正反面，用来反转的，所以只选择一个*/
+	-webkit-transform:rotateY(0deg);     /*rotateY()是以Y轴旋转*/
+	-moz-transform:rotateY(0deg); 
+	}                        
+.photo_back .photo_wrap {           /*这个就是想真实世界的正反面海报了*/
+	-webkit-transform:rotateY(180deg);
+	-moz-transform:rotateY(180deg);
+	}	
+  /*控制按钮*/
+  .nav {
+  	width:40%;
+  	height:30px;
+  	position:absolute;
+  	bottom:20px;
+  	left:30%;
+  	z-index:999;
+  	text-align:center;
+  	}	
+   /*普通样式*/
+   .nav .i {
+   	width:30px;
+   	height:30px;
+   	display:inline-block;   /*这个可以是水平垂直居中*/
+   	cursor:pointer;
+   	background-color:#aaa;
+   	border-radius:50%;
+   	text-align:center;
+   	-webkit-transform:scale(.48);
+   	-webkit-transition:all 1s;
+   	-moz-transform:scale(.48);
+   	-moz-transition:all 1s;
+   	}	
+   	/*控制按钮,这个是被选中为中间图片时，就会变大*/
+   	.nav .i_current {
+   		-webkit-transform:scale(1);
+   		-moz-transform:scale(1);
+   		}
+   	.nav .i_back {
+   		-webkit-transform:rotateY(-180deg);
+   		-moz-transform:rotateY(-180deg);
+   		background-color:#555;
+   		}	
+   		/*这个是当点击其他图片时，居中的图片会慢慢的滑动离开，因为这里给了样式，所以就不会立刻消失了,用于美化*/
+   	 .photo {
+   	 	left:50%;
+   	 	top:50%;
+   	 	margin:-160px 0 0 -130px;
+   	  }	
+   	  /*这个是点击旋转时，有一个平移的效果*/	
+   	  .photo_wrap {
+   	  	-webkit-transform-origin:0% 50%;
+   	  	-moz-transform-origin:0% 50%;
+   	  	}	
+   	  .photo_front .photo_wrap {
+   	  	-webkit-transform:translate(0px , 0px) rotateY(0deg);
+   	  	-moz-transform:translate(0px , 0px) rotateY(0deg);
+   	  	}
+   	  .photo_back .photo_wrap {
+   	  	-webkit-transform:translate(260px ,0px) rotateY(180deg);  /*这个translate(x,y)这个是水平和垂直平移的值*/
+   	  	-moz-transform:translate(260px ,0px) rotateY(180deg);
+   	  	}		
+</style>
+</head>
+<body onselectstart="return false;"> 
+	<!--改写视图，为模板字符串-->
+<div class="wrap" id="wrap">
+	<!--photo负责平移和旋转-->
+ <div class="photo photo_front" onclick="trun(this)" id="photo_{{index}}">   <!--这个是返回这个函数，当点击的时候，在这里写的{{index}}是要在后面用来替换的-->
+ 	<!--photo_wrap这个是负责翻转-->
+ 	<div class="photo_wrap">
+ 	<div class="side side_front">
+ 		<p class="image"><img src="ps/{{img}}" alt="" /></p>
+ 		<p class="caption">{{caption}}</p>
+ 	</div>
+ 	<div class="side side_back">
+ 		<p class="desc">{{desc}}</p>
+ 	</div>
+ 	</div>
+ </div>	
+	
+</div>
+<script type="text/javascript" src="data.js"></script>
+<script type="text/javascript">
+	//1.翻面控制
+	function trun(el){
+		var cls=el.className;
+		var n=el.id.split('_')[1];   //这个是列如是photo_1，则获取是2,split是划分为数组
+		if(!/photo_center/.test(cls)){
+			return rsort(n);
+			}
+		if(/photo_front/.test(cls)){    //切记，在正则表达式中不要将test写成了text，否则会出现错误
+			cls=cls.replace('photo_front','photo_back');
+			g('#photo_'+n).className = ' i_back ';
+			}else {
+				cls=cls.replace('photo_back','photo_front');
+				g('#photo_'+n).className = g('#photo_' + n).className.replace(/\s*i_back\s*/,' ');
+				}
+		return el.className=cls;
+		}
+  	//2.获取随机数
+  /*
+	function random(range1,range2){  //Math.random()是随机返回0到1之间的小数
+		var max=Math.max(range1,range2);
+		var min=Math.min(range1,range2);
+		var diff=max-min;
+		var number= Math.floor(max*Math.random()-min*Math.random()*min+min);   //这里记着要加一个min，因为这里是使用了MAth.floor()向下取整
+		return number;
+		}	
+		*/
+	function rand(min,max){
+		var diff=max-min;
+		var number=Math.ceil(Math.random()*diff+min);
+		return number;
+		}			
+		
+	//3.通用函数
+	function g(selector){
+	var method=selector.substr(0,1)=='.'?'getElementsByClassName':'getElementById';	
+		return document[method](selector.substr(1));   //substr的方法是，substr(0,1)是从第0个开始，获取一个元素，而substr(1)这个就是获取1之后的所有元素
+		}	
+	//4.输出所有的海报
+	var data=data;
+	function addphotos(){
+		var template=g('#wrap').innerHTML;
+		var html=[];
+		var nav=[]; //这个是下面选择的框
+		for(var s=0;s<data.length;s++){  //这个循环的简便方法可以写成for(var s in dates)
+    var _html=template.replace('{{index}}',s).replace('{{img}}',data[s].img).replace('{{caption}}',data[s].caption).replace('{{desc}}',data[s].desc);
+			              html.push(_html); //js的约定，一般临时或者不常用的变量，就用在前面加一个下划线
+			//这个是nav的那个小点点，用来点击就使那张图片居中
+			nav.push('<span id="nav_'+s+'" onclick="trun( g(\'#photo_'+s+'\') )" class="i">&nbsp;</span>');
+			}
+			html.push('<div class="nav">'+nav.join('')+'</div>');
+		  g('#wrap').innerHTML=html.join('');//切记 如果不写join('')这个的话，join就会默认为join(',');
+		  rsort(rand(0,data.length));     //这个是让图片居中显示
+		}	
+		addphotos();  //调用该函数
+/*		
+//6.计算左右分区的范围 {left:{x:[min,max],y:[min,max]},right:{x:[min,max],y:[min,max]}}	,这个是range里面返回一个对象，对象里面还有数组
+function range(){
+	var range={left:{x:[],y:[]},right:{x:[],y:[]} };
+	var wrap={
+		w:g('.wrap').clientWidth,               //这里大括号，并且要用到wh，则是:而不是等号
+		h:g('.wrap').clientHeight
+		};
+		var photo={
+		w:g('.photo').clientWidth,
+		h:g('.photo').clientHeight
+		};
+		range.wrap=wrap;
+		range.photo=photo;
+		
+		range.left.x=[0-photo.w,wrap.w/2-photo.w/2];
+		range.left.y=[0-photo.h,wrap.h];
+		
+		range.right.x=[wrap.w/2-photo.w/2,wrap.w+photo.w];
+		range.right.y=[0-photo.h,wrap.h];
+		return range;
+	}
+*/	
+	//5.排序海报，让图片居中
+	function rsort(n){
+		//这是删除中间的那个图片的className
+		var _photo=g('.photo');
+		var photos=[];
+		for(var s=0;s< _photo.length;s++){
+			_photo[s].className=_photo[s].className.replace(/\s*photo_center\s*/,' ');
+			_photo[s].className=_photo[s].className.replace(/\s*photo_front\s*/,' ');
+			_photo[s].className=_photo[s].className.replace(/\s*photo_back\s*/,' ');
+			_photo[s].className +=' photo_front';   //切记，在这里是 +=为className的样式，不能为等于，否则就会出现错误，图片大小就会变成原来的大小，因为=的话，就只有photo_front一个属性了，一定要注意
+			_photo[s].style.left='';
+			_photo[s].style.top='';
+			_photo[s].style['transform']=_photo[s].style['-webkit-transform']='rotate(360deg) scale(1.2)';  //先使所有的图片都设置为放大为本身，而居中的图片则放大为1.2倍，用于好看,且记住rotate() 后面还可以加scale()加倍数
+			 photos.push(_photo[s]);
+			}
+		//这是获取中间的图片
+		var photo_center=g('#photo_'+n);
+		photo_center.className+=' photo_center';
+		photo_center=photos.splice(n,1)[0];    //splice(n,1)是删除从第n个元素开始，删除1个，delate也是删除，但是删除了之后，有undefined的，不建议，一般有条件才使用
+		
+		//把海报氛围左右两个区域
+		var photos_left=photos.splice(0,Math.ceil(photos.length/2));
+		var photos_right=photos;
+		//var ranges=range();   //命名不能和函数名一样，或则不能获取函数里的值
+		//计算左右分区的值
+		  var w=document.documentElement.clientWidth;
+		  var h=document.documentElement.clientHeight;
+    for(var s=0;s<photos_left.length;s++){
+    	var photo1=photos_left[s];
+    	photo1.style.left=rand(-130,w/2-130-260) + 'px';//这个是图片位置的随机值，
+    	photo1.style.top=rand(-100,600) + 'px';
+    	photo1.style['transform']=photo1.style['-webkit-transform']='rotate('+rand(-150,30)+'deg) scale(1)';  //在js中兼容火狐浏览器的css样式，就是去掉-webkit-,用连等号,切记
+    	}
+    	for(var i=0;i<photos_right.length;i++){
+    		var photo2=photos_right[i];
+    		photo2.style.left=rand(w/2+130+260,w)+'px';
+    		photo2.style.top=rand(-100,600)+'px';
+    		photo2.style['transform']=photo2.style['-webkit-transform']='rotate('+rand(-150,30)+'deg) scale(1)';
+    		}
+    //处理控制按钮，当贝选中的这个当是正面时	
+      var navs=g('.i');
+    	for(var s=0;s<navs.length;s++){
+    		navs[s].className=navs[s].className.replace(/\s*i_current\s*/,' '); //这个循环是当选中其他的按钮时，就是前面一个放大的按钮变为小的
+    		navs[s].className=navs[s].className.replace(/\s*i_back\s*/,' '); //  \s*是去掉空格,这里都是通过className来添加class，在css写好样式，在用来调用即可
+    		}
+    	//这个是当前图片居中的时候,命名为i_current,在css写样式	
+    	g('#nav_'+n).className += ' i_current ';	
+		}
+
+</script>
+</body>
+</html>
