@@ -10,7 +10,7 @@ body {
 	background:#fff;
 	color:#555;
 	font-family:"微软雅黑";
-	-webkit-font-smoothing:antialiased;
+	-webkit-font-smoothing:antialiased;  /*none —— 对低像素的文本比较好 subpixel-antialiased——默认值 antialiased ——抗锯齿很好*/
 	-moz-font-smoothing:antialiased;   /*moz是为了兼容Firefox的浏览器*/
 	}
 .wrap {
@@ -225,7 +225,7 @@ body {
 			nav.push('<span id="nav_'+s+'" onclick="trun( g(\'#photo_'+s+'\') )" class="i">&nbsp;</span>');
 			}
 			html.push('<div class="nav">'+nav.join('')+'</div>');
-		  g('#wrap').innerHTML=html.join('');//切记 如果不写join('')这个的话，join就会默认为join(',');
+		  g('#wrap').innerHTML=html.join('');//切记 这个join是拼接字符串    我们可以想到一个例子 "abcdef".split("").reverse().join("") 字符串取反
 		  rsort(rand(0,data.length));     //这个是让图片居中显示
 		}	
 		addphotos();  //调用该函数
@@ -234,7 +234,7 @@ body {
 function range(){
 	var range={left:{x:[],y:[]},right:{x:[],y:[]} };
 	var wrap={
-		w:g('.wrap').clientWidth,               //这里大括号，并且要用到wh，则是:而不是等号
+		w:g('.wrap').clientWidth,           
 		h:g('.wrap').clientHeight
 		};
 		var photo={
