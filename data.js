@@ -1,5 +1,5 @@
-﻿var data=[];    //在前面要用到这个数组
-var dataStr='1.sub1<br>\
+﻿var data = []; //在前面要用到这个数组
+var dataStr = '1.sub1<br>\
 <br>\
 导演:威德-杰克逊<br>\
 编剧:弗兰威尔士<br>\
@@ -159,23 +159,12 @@ var dataStr='1.sub1<br>\
 片长：144分钟<br>\
 ';
 
-var d=dataStr.split('<br><br><br>');
-for(var i=0;i<d.length;i++){
-	var c=d[i].split('<br><br>');
+var d = dataStr.split('<br><br><br>');
+for (var i = 0; i < d.length; i++) {
+	var c = d[i].split('<br><br>');
 	data.push({
-		img:c[0].split('.')[1]+'.jpg',   //这个是获取图片
-		caption:c[0].split('.')[1],
-		desc:c[1]
-		})
-		
-	}
-
-
-
-
-
-
-
-
-
-
+		img: c[0].split('.')[1] + '.jpg', //这个是获取图片
+		caption: c[0].split('.')[1],
+		desc: c[1]
+	})
+}
